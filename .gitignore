@@ -1,0 +1,96 @@
+## Ignore Visual Studio temporary files, build results, and
+## user-specific files
+
+# User-specific files
+*.rsuser
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Build results
+bin/
+obj/
+[Bb]uild/
+[Ll]og/
+
+# Uncomment if you have tasks that create the following files:
+# *.log
+
+# VSCode settings
+.vscode/
+
+# Rider project files
+.idea/
+
+# Visual Studio working directory
+.vs/
+
+# ASP.NET Scaffolding
+ScaffoldingReadMe.txt
+
+# NuGet packages
+*.nupkg
+packages/
+*.snupkg
+
+# npm packages
+node_modules/
+
+# Windows image file caches
+Thumbs.db
+ehthumbs.db
+
+# Folder config file
+Desktop.ini
+
+# Recycle Bin used on file shares
+$RECYCLE.BIN/
+
+# VS Code local history
+.history/
+
+# .NET Core
+project.lock.json
+project.fragment.lock.json
+artifacts/
+
+# dotCover
+*.dotCover
+
+# JetBrains Rider
+.idea/
+
+# Local .NET secrets
+secrets.json
+
+# User-specific files
+*.user
+*.userprefs
+
+# Resharper
+_ReSharper*/
+*.[Rr]e[Ss]harper
+*.DotSettings.user
+
+# dotnet watch
+**/appsettings.Development.json
+**/appsettings.Local.json
+
+# EF Migrations snapshot (optional)
+Migrations/*Snapshot.cs
+
+# Mac-specific
+.DS_Store
+
+# Linux-specific
+*~
+
+# Log files
+*.log
+
+# Publish directory (optional, if you use `dotnet publish`)
+publish/
+
+# Test results
+TestResults/

@@ -1,0 +1,6 @@
+@VG.backend_HostAddress = http://localhost:5261
+
+GET {{VG.backend_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
