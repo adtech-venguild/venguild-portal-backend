@@ -6,6 +6,8 @@ using Microsoft.IdentityModel.Tokens;
 using System.Data;
 using System.Text;
 using VG.EfCore;
+using VG.Services.AuthService;
+using VG.Services.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -42,6 +44,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 //    options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
 builder.Services.AddScoped<IDbConnection>(sp =>
     new SqlConnection(builder.Configuration.GetConnectionString("DefaultConnection")));
+builder.Services.AddScoped<IAuthService, AuthService>();
 
 
 var app = builder.Build();

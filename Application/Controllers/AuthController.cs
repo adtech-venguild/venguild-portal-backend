@@ -4,12 +4,21 @@
     using System.Threading.Tasks;
     using VG.backend.Authentication;
     using VG.Common.Params.Auth;
+    using VG.Services.Interfaces;
 
     [Route("api/auth")]
     [ApiController]
     public class AuthController : ControllerBase
     {
-        public AuthService AuthService { get; set; }
+        public IAuthService AuthService { get; set; }
+
+        public AuthController(IAuthService authService)
+        {
+            this.AuthService = authService;
+        }
+
+
+
         [HttpPost("register")]
         public IActionResult Register([FromBody] Registration register)
         {
@@ -17,6 +26,13 @@
             {
                 return BadRequest(ModelState);
             }
+
+            if (!register.Password.Equals(register.ConfirmedPassword))
+            {
+                return BadRequest(ModelState);
+            }
+
+            this.AuthService.SaveUser(register);
 
             // Registration logic here (e.g., save to DB, send confirmation email, etc.)
             return Ok("User registered successfully.");
