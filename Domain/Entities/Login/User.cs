@@ -1,4 +1,6 @@
 ﻿using VG.Domain.Entities;
+using VG.Domain.Entities.Common;
+using VG.Domain.Entities.Enum;
 
 namespace VG.domain.Entities.Login
 {
@@ -8,7 +10,7 @@ namespace VG.domain.Entities.Login
         public string Email { get; set; }             // User's email
         public string Password { get; set; }          // Hashed password
         public bool Deleted { get; set; }             // Soft delete flag
-        public string Status { get; set; }            // Custom status (e.g., Active, Inactive)
+        public RecordStatus Status { get; set; }            // Custom status (e.g., Active, Inactive)
         public string Contact { get; set; }           // Contact number or info
         public bool Verified { get; set; }            // Email or account verification status
         public string VerificationTerms { get; set; } // Terms related to verification email/mobile
