@@ -2,7 +2,7 @@
 namespace VG.EfCore
 {
     using Microsoft.EntityFrameworkCore;
-    using VG.domain.Entities.Login;
+    using VG.Domain.Entities.Login;
 
     public class AppDbContext : DbContext
     {

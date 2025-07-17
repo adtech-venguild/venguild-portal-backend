@@ -17,8 +17,6 @@
             this.AuthService = authService;
         }
 
-
-
         [HttpPost("register")]
         public IActionResult Register([FromBody] Registration register)
         {
@@ -27,15 +25,16 @@
                 return BadRequest(ModelState);
             }
 
-            if (!register.Password.Equals(register.ConfirmedPassword))
+            try
             {
-                return BadRequest(ModelState);
+                this.AuthService.SaveUser(register);
+                return Ok("User registered successfully.");
             }
-
-            this.AuthService.SaveUser(register);
-
-            // Registration logic here (e.g., save to DB, send confirmation email, etc.)
-            return Ok("User registered successfully.");
+            catch (Exception ex)
+            {
+                // In production, log the exception properly using ILogger
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
         }
 
         [HttpPost("login")]
@@ -46,10 +45,12 @@
                 return BadRequest(ModelState);
             }
 
-            // Authenticate the user (check email and password)
-            // If successful, return a JWT or session info
-            // await AuthService.GenerateToken(login);
+            var user = AuthService.AuthenticateUser(login.Email, login.Password);
 
+            if (user == null)
+            {
+                return Unauthorized("Invalid email or password.");
+            }
 
             return Ok("User logged in successfully.");
         }

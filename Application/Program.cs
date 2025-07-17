@@ -6,7 +6,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Data;
 using System.Text;
 using VG.EfCore;
-using VG.Services.AuthService;
+using VG.Services;
 using VG.Services.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
