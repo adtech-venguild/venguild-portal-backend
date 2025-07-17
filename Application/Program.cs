@@ -11,7 +11,7 @@ using VG.Services.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
-//// Add services to the container.
+//// Add services to the container...
 //builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 //    .AddMicrosoftIdentityWebApi(builder.Configuration.GetSection("AzureAd"));
 
