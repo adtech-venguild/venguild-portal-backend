@@ -6,6 +6,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Data;
 using System.Text;
 using VG.EfCore;
+using VG.Services;
 using VG.Services.AuthService;
 using VG.Services.Interfaces;
 
@@ -37,14 +38,16 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     });
 
 
-////// Replace with your actual connection string
-//var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+//////// Replace with your actual connection string
+////var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
-//builder.Services.AddDbContext<AppDbContext>(options =>
-//    options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
-builder.Services.AddScoped<IDbConnection>(sp =>
-    new SqlConnection(builder.Configuration.GetConnectionString("DefaultConnection")));
+////builder.Services.AddDbContext<AppDbContext>(options =>
+////    options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
+//builder.Services.AddScoped<IDbConnection>(sp =>
+//    new SqlConnection(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddSingleton<IEnvService, EnvService>();
+builder.Services.AddSingleton<TokenService>();
 
 
 var app = builder.Build();

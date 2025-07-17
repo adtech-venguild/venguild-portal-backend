@@ -2,7 +2,6 @@
 {
     using Microsoft.AspNetCore.Mvc;
     using System.Threading.Tasks;
-    using VG.backend.Authentication;
     using VG.Common.Params.Auth;
     using VG.Services.Interfaces;
 
@@ -20,7 +19,7 @@
 
 
         [HttpPost("register")]
-        public IActionResult Register([FromBody] Registration register)
+        public async Task<IActionResult> Register([FromBody] Registration register)
         {
             if (!ModelState.IsValid)
             {
@@ -32,7 +31,7 @@
                 return BadRequest(ModelState);
             }
 
-            this.AuthService.SaveUser(register);
+            await this.AuthService.SaveUserAsync(register);
 
             // Registration logic here (e.g., save to DB, send confirmation email, etc.)
             return Ok("User registered successfully.");
@@ -45,11 +44,13 @@
             {
                 return BadRequest(ModelState);
             }
+   
+            var result = await this.AuthService.LoginUserAsync(login);
 
-            // Authenticate the user (check email and password)
-            // If successful, return a JWT or session info
-            // await AuthService.GenerateToken(login);
-
+            if (result.Item1 == null)
+            {
+                return BadRequest(result.Item2);
+            }
 
             return Ok("User logged in successfully.");
         }

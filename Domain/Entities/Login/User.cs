@@ -1,5 +1,4 @@
 ﻿using VG.Domain.Entities;
-using VG.Domain.Entities.Common;
 using VG.Domain.Entities.Enum;
 
 namespace VG.domain.Entities.Login

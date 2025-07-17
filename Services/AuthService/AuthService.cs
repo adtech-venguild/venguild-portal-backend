@@ -1,27 +1,30 @@
 ﻿namespace VG.Services.AuthService
 {
     using Dapper;
-    using Microsoft.Data.SqlClient;
     using System.Data;
     using VG.Common.Params.Auth;
     using VG.domain.Entities.Login;
-    using VG.Domain.Entities.Login;
     using VG.Services.Interfaces;
 
     public class AuthService : IAuthService
     {
-        public AuthService() { }
+        private readonly IEnvService envService;
+        private readonly TokenService tokenService;
 
-        // public async Task<AuthResponse>
-
-        private readonly string _connectionString = "server=127.0.0.1 :3306;database=veng;uid=root;pwd=Qwe123$%^;";
-
-        public void SaveUser(Registration user)
+        public AuthService(IEnvService envService, TokenService tokenService) {
+            this.envService = envService;
+            this.tokenService = tokenService;
+        }
+        
+        public async Task SaveUserAsync(Registration user)
         {
+            // Password should be encrypted in database.
+            string hashedPassword = BCrypt.Net.BCrypt.HashPassword(user.Password);
+
             var newUser = new User()
             {
                 Email = user.Email,
-                Password = user.Password,
+                Password = hashedPassword,
                 Status = Domain.Entities.Enum.RecordStatus.Active,
                 Contact = "09010239102931",
                 Verified = true,
@@ -29,15 +32,37 @@
             };
 
 
-            using (IDbConnection db = new SqlConnection(_connectionString))
+            using (IDbConnection connection = new MySql.Data.MySqlClient.MySqlConnection(this.envService.DbConnectionString))
             {
-                string sql = @"
-                INSERT INTO Users 
-                (Email, Password, Contact, Verified, VerificationTerms)
+                connection.Open();
+                 string sql = @"
+                INSERT INTO Users (Email, Password, Contact, Verified, VerificationTerms, UserTypeId)
                 VALUES 
-                (@Email, @Password, @Contact, @Verified, @VerificationTerms);";
+                (@Email, @Password, @Contact, @Verified, @VerificationTerms, 2);";
+                
+                await connection.ExecuteAsync(sql, newUser);
+            }
+        }
 
-                db.Execute(sql, newUser);
+        public async Task<(User?, string)> LoginUserAsync(Login login)
+        {
+            using (IDbConnection connection = new MySql.Data.MySqlClient.MySqlConnection(this.envService.DbConnectionString))
+            {
+                connection.Open();
+                string sql = @"SELECT * FROM Users WHERE Email = @Email AND Deleted = 0 AND Status = 'Active'";
+                var user =  connection.QueryFirstOrDefaultAsync<User>(sql, new { login.Email }).Result;
+
+                bool isMatch = BCrypt.Net.BCrypt.Verify(login.Password, user == null ? string.Empty : user.Password);
+
+                if (!isMatch)
+                {
+                    Console.WriteLine($"Password is matched: {login.Email}");
+
+                    string Token = this.tokenService.GenerateJwtToken(user!);
+
+                    return (user, Token);
+                }
+                return (null, "Login error.");
             }
         }
     }
